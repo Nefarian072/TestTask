@@ -10,17 +10,11 @@ public class Draw
 {
     private readonly List<Athlete> _athletes;
 
-    public Draw(IEnumerable<string> lines)
+    public Draw(IEnumerable<Athlete> athletes)
     {
-        _athletes = lines
-            .Where(l => !string.IsNullOrWhiteSpace(l))
-            .Select(line =>
-            {
-                var parts = line.Split(',', 2);
-                return new Athlete(parts[0].Trim(), parts[1].Trim());
-            })
-            .ToList();
+        _athletes = athletes.ToList();
     }
+
 
     public List<Athlete>? Arrange()
     {
@@ -39,15 +33,15 @@ public class Draw
         }
 
         var result = new List<Athlete>();
-        string? lastTeam = null;
+        string lastTeam = null;
 
         while (pq.Count > 0)
         {
-            string team1 = pq.Dequeue();
+            var team1 = pq.Dequeue();
 
             if (team1 == lastTeam && pq.Count > 0)
             {
-                string team2 = pq.Dequeue();
+                var team2 = pq.Dequeue();
                 var athlete2 = groups[team2].Dequeue();
                 result.Add(athlete2);
                 lastTeam = team2;
